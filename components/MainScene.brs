@@ -52,6 +52,7 @@ sub Init()
     m.playingList = []
     m.playingIndex = 0
     m.dialogNode = invalid
+    m.initialFocusTimer = invalid
 
     m.categoryGrid.observeField("itemSelected", "onCategorySelected")
     m.channelGrid.observeField("itemSelected", "onChannelSelected")
@@ -65,12 +66,117 @@ sub Init()
     m.retryButton.observeField("trigger", "onRetry")
 
     SetupFocusTimer()
+    m.top.setFocus(true)
+
     if m.playlistUrl <> "" and IsHttpUrl(m.playlistUrl) then
         LoadPlaylist(m.playlistUrl)
     else
         ShowSettings()
     end if
+
+    SetupInitialFocus()
 end sub
+
+' ---------------------------------------------------------------------------
+' Foco inicial e navegação geral
+' ---------------------------------------------------------------------------
+
+sub SetupInitialFocus()
+    timer = CreateObject("roSGNode", "Timer")
+    timer.duration = 0.25
+    timer.repeat = false
+    timer.observeField("fire", "onInitialFocus")
+    m.top.appendChild(timer)
+    m.initialFocusTimer = timer
+    timer.control = "start"
+end sub
+
+sub onInitialFocus()
+    if m.initialFocusTimer <> invalid then
+        m.initialFocusTimer.control = "stop"
+        m.initialFocusTimer = invalid
+    end if
+    FocusCurrentView()
+end sub
+
+sub FocusCurrentView()
+    if m.player <> invalid and m.player.visible then
+        return
+    end if
+
+    if m.loading then
+        m.navCategories.setFocus(true)
+        return
+    end if
+
+    if m.view = "settings" and m.settingGrid.visible then
+        m.settingGrid.setFocus(true)
+        return
+    end if
+
+    if m.view = "channels" and m.channelGrid.visible then
+        m.channelGrid.setFocus(true)
+        return
+    end if
+
+    if m.view = "categories" and m.categoryGrid.visible then
+        m.categoryGrid.setFocus(true)
+        return
+    end if
+
+    if m.view = "error" and m.errorPanel.visible then
+        m.retryButton.setFocus(true)
+        return
+    end if
+
+    if m.view = "settings" then
+        m.navSettings.setFocus(true)
+    else if m.view = "channels" then
+        if m.categoryFilter = "favorites" then
+            m.navFavorites.setFocus(true)
+        else if m.categoryFilter = "search" then
+            m.navSearch.setFocus(true)
+        else
+            m.navCategories.setFocus(true)
+        end if
+    else
+        m.navCategories.setFocus(true)
+    end if
+end sub
+
+sub MoveHeaderFocus(delta as Integer)
+    if m.navCategories.hasFocus() then
+        if delta > 0 then
+            m.navFavorites.setFocus(true)
+        else
+            m.navSettings.setFocus(true)
+        end if
+    else if m.navFavorites.hasFocus() then
+        if delta > 0 then
+            m.navSearch.setFocus(true)
+        else
+            m.navCategories.setFocus(true)
+        end if
+    else if m.navSearch.hasFocus() then
+        if delta > 0 then
+            m.navSettings.setFocus(true)
+        else
+            m.navFavorites.setFocus(true)
+        end if
+    else if m.navSettings.hasFocus() then
+        if delta > 0 then
+            m.navCategories.setFocus(true)
+        else
+            m.navSearch.setFocus(true)
+        end if
+    else
+        m.navCategories.setFocus(true)
+    end if
+end sub
+
+function HeaderHasFocus() as Boolean
+    return m.navCategories.hasFocus() or m.navFavorites.hasFocus() or m.navSearch.hasFocus() or m.navSettings.hasFocus()
+end function
 
 ' ---------------------------------------------------------------------------
 ' Foco dos botões do cabeçalho
@@ -312,19 +418,14 @@ sub ShowCategories()
         m.viewTitle.text = "Nenhuma lista"
         m.viewSubtitle.text = "Adicione a URL da sua lista M3U nas Ajustes"
         UpdateNav("categories")
-        SetFooter("Ajustes  adicionar lista     Back  sair")
+        SetFooter("↑  ir para Ajustes     OK  em Ajustes     Back  sair")
         ShowEmpty("Adicione sua própria lista", "Vá em Ajustes > URL da lista e informe uma URL http:// ou https://.")
         m.navSettings.setFocus(true)
         return
     end if
 
     if m.allChannels.Count() = 0 then
-        m.viewTitle.text = "Nenhum canal"
-        m.viewSubtitle.text = "Não há canais carregados nesta lista"
-        UpdateNav("categories")
-        SetFooter("Ajustes  trocar lista     Tentar  recarregar")
-        ShowEmpty("Lista vazia ou sem canais", "Verifique a URL nas Ajustes ou tente recarregar a lista.")
-        m.retryButton.setFocus(true)
+        ShowError("Lista vazia ou sem canais", "Verifique a URL nas Ajustes ou tente recarregar a lista.")
         return
     end if
 
@@ -342,10 +443,11 @@ sub ShowCategories()
     m.viewSubtitle.text = subtitle
 
     UpdateNav("categories")
-    SetFooter("OK  abrir categoria     Setas  navegar     Back  sair")
+    SetFooter("OK  abrir categoria     ↑  cabeçalho     Setas  navegar     Back  sair")
 
     if m.categories.Count() = 0 then
         ShowEmpty("Lista vazia", "Nenhum canal compatível foi encontrado.")
+        m.navCategories.setFocus(true)
         return
     end if
 
@@ -382,12 +484,12 @@ sub ShowChannels(filterType as String, group as String, query as String)
         UpdateNav("categories")
     end if
 
-    SetFooter("OK  assistir     Back  voltar     *  favoritar durante a reprodução")
+    SetFooter("OK  assistir     ↑  cabeçalho     Back  voltar     *  favoritar durante a reprodução")
 
     if list.Count() = 0 then
         if filterType = "favorites" then
             ShowEmpty("Nenhum favorito ainda", "Abra um canal e pressione * para adicionar aos favoritos.")
-            m.navCategories.setFocus(true)
+            m.navFavorites.setFocus(true)
         else if filterType = "search" then
             ShowEmpty("Nada encontrado", "Não encontramos canais com esse nome. Tente outra busca.")
             m.navSearch.setFocus(true)
@@ -508,9 +610,9 @@ sub ShowSettings()
     m.view = "settings"
 
     m.viewTitle.text = "Ajustes"
-    m.viewSubtitle.text = "Escolha a lista e as preferências do aplicativo"
+    m.viewSubtitle.text = "Adicione sua URL da lista M3U/M3U8 e defina as preferências"
     UpdateNav("settings")
-    SetFooter("OK  selecionar     Back  voltar")
+    SetFooter("OK  selecionar     ↑  cabeçalho     Back  voltar")
 
     BuildSettings()
     m.settingGrid.visible = true
@@ -846,13 +948,13 @@ sub ShowError(title as String, message as String)
 
     m.errorTitle.text = title
     m.errorMessage.text = message
-    m.errorHint.text = "Use Tentar para baixar de novo ou abra Ajustes para trocar de lista."
+    m.errorHint.text = "Use Tentar para baixar de novo ou abra Ajustes para trocar/informar a lista."
 
     m.view = "error"
     m.viewTitle.text = "Não foi possível carregar"
-    m.viewSubtitle.text = "Verifique sua conexão ou escolha outra lista"
+    m.viewSubtitle.text = "Verifique sua conexão ou a URL da lista"
     UpdateNav("none")
-    SetFooter("OK  tentar novamente     Back  voltar")
+    SetFooter("↑  ir para Ajustes     OK  tentar novamente     Back  voltar")
 
     m.errorPanel.visible = true
     m.retryButton.setFocus(true)
@@ -967,6 +1069,67 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
 
     lower = LCase(key)
 
+    if lower = "up" then
+        if m.loading or m.player.visible then
+            return false
+        end if
+        if HeaderHasFocus() then
+            return false
+        end if
+
+        if m.view = "settings" then
+            m.navSettings.setFocus(true)
+        else if m.view = "channels" then
+            if m.categoryFilter = "favorites" then
+                m.navFavorites.setFocus(true)
+            else if m.categoryFilter = "search" then
+                m.navSearch.setFocus(true)
+            else
+                m.navCategories.setFocus(true)
+            end if
+        else
+            m.navCategories.setFocus(true)
+        end if
+        return true
+    end if
+
+    if lower = "down" then
+        if m.loading or m.player.visible or not HeaderHasFocus() then
+            return false
+        end if
+
+        if m.view = "settings" and m.settingGrid.visible then
+            m.settingGrid.setFocus(true)
+            return true
+        else if m.view = "channels" and m.channelGrid.visible then
+            m.channelGrid.setFocus(true)
+            return true
+        else if m.view = "categories" and m.categoryGrid.visible then
+            m.categoryGrid.setFocus(true)
+            return true
+        else if m.view = "error" and m.errorPanel.visible then
+            m.retryButton.setFocus(true)
+            return true
+        end if
+        return false
+    end if
+
+    if lower = "left" then
+        if HeaderHasFocus() and not m.loading and not m.player.visible then
+            MoveHeaderFocus(-1)
+            return true
+        end if
+        return false
+    end if
+
+    if lower = "right" then
+        if HeaderHasFocus() and not m.loading and not m.player.visible then
+            MoveHeaderFocus(1)
+            return true
+        end if
+        return false
+    end if
+
     if lower = "back" then
         if m.loading then
             CancelLoad()
@@ -986,6 +1149,10 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
         if m.view = "error" then
             if m.allChannels.Count() > 0 then
                 ShowCategories()
+                return true
+            end if
+            if m.playlistUrl <> "" then
+                ShowSettings()
                 return true
             end if
             return false

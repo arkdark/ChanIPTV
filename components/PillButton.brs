@@ -52,7 +52,11 @@ sub RefreshVisuals()
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
-    if press and LCase(key) = "ok" then
+    if not press then
+        return false
+    end if
+    k = LCase(key)
+    if k = "ok" then
         m.top.trigger = m.top.trigger + 1
         return true
     end if
