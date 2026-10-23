@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="ChannelItem" extends="Group">
+    <interface>
+        <field id="itemContent" type="node" onChange="onContentChanged" />
+        <field id="focusPercent" type="float" value="0" onChange="onFocusChanged" />
+    </interface>
+    <script type="text/brightscript" uri="ChannelItem.brs" />
+    <children>
+        <Poster id="bgNormal" uri="pkg:/images/card.png" width="180" height="196" />
+        <Poster id="bgFocus" uri="pkg:/images/card_focus.png" width="180" height="196" opacity="0" />
+        <Poster id="logoBox" uri="pkg:/images/logo_box.png" translation="[20,16]" width="140" height="76" />
+        <Poster id="logo" translation="[24,20]" width="132" height="68" loadSync="false" loadDisplayMode="scaleToFit" />
+        <Label id="initialsLabel" translation="[24,20]" width="132" height="68" font="font:LargeBoldSystemFont" color="0x57E6C8FF" horizAlign="center" vertAlign="center" />
+        <Label id="nameLabel" translation="[8,102]" width="164" height="42" font="font:MediumBoldSystemFont" color="0xF2F6FCFF" horizAlign="center" vertAlign="top" wrap="true" />
+        <Label id="groupLabel" translation="[8,148]" width="164" height="20" font="font:SmallSystemFont" color="0x7F8DA8FF" horizAlign="center" vertAlign="center" />
+        <Poster id="favoriteStar" uri="pkg:/images/star.png" translation="[148,6]" width="26" height="26" visible="false" />
+    </children>
+</component>

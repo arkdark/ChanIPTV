@@ -1,0 +1,10 @@
+ChanIPTV.zip
+out/
+node_modules/
+.brighterscript/
+*.log
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~

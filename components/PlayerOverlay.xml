@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="PlayerOverlay" extends="Group">
+    <interface>
+        <field id="channel" type="assocarray" onChange="onChannelChanged" />
+        <field id="favorite" type="boolean" value="false" onChange="onFavoriteChanged" />
+        <field id="playing" type="boolean" value="false" onChange="onPlayingChanged" />
+        <field id="position" type="string" value="" onChange="onPositionChanged" />
+        <field id="command" type="string" value="" />
+    </interface>
+    <script type="text/brightscript" uri="PlayerOverlay.brs" />
+    <children>
+        <Rectangle id="playerBg" width="1280" height="720" color="0x000000FF" />
+        <Video id="video" width="1280" height="720" visible="false" />
+
+        <Rectangle id="topBar" translation="[0,0]" width="1280" height="120" color="0x070B14E6" />
+        <Poster id="logoBox" uri="pkg:/images/logo_box.png" translation="[22,24]" width="126" height="68" />
+        <Poster id="channelLogo" translation="[26,26]" width="118" height="64" loadDisplayMode="scaleToFit" />
+        <Label id="logoInitials" translation="[26,26]" width="118" height="64" font="font:LargeBoldSystemFont" color="0x57E6C8FF" horizAlign="center" vertAlign="center" />
+        <Label id="channelName" translation="[166,22]" width="820" height="44" font="font:ExtraLargeBoldSystemFont" color="0xFFFFFFFF" vertAlign="center" />
+        <Label id="channelGroup" translation="[168,68]" width="760" height="24" font="font:SmallSystemFont" color="0x57E6C8FF" vertAlign="center" />
+        <Poster id="favoriteStar" uri="pkg:/images/star.png" translation="[1206,32]" width="38" height="38" visible="false" />
+
+        <Group id="statusPanel" visible="false">
+            <Rectangle translation="[320,296]" width="640" height="120" color="0x0A111DE6" />
+            <Label id="statusLabel" translation="[350,312]" width="580" height="88" font="font:MediumSystemFont" color="0xFFFFFFFF" horizAlign="center" vertAlign="center" wrap="true" />
+        </Group>
+
+        <Rectangle id="bottomBar" translation="[0,620]" width="1280" height="100" color="0x070B14E6" />
+        <Label id="positionLabel" translation="[32,646]" width="320" height="24" font="font:SmallSystemFont" color="0x7F8DA8FF" vertAlign="center" />
+        <Label id="hintLabel" translation="[300,646]" width="680" height="24" font="font:SmallSystemFont" color="0xD5DEEDFF" horizAlign="center" vertAlign="center" text="Esquerda/Direita trocar canal    * favorito    Back sair" />
+    </children>
+</component>

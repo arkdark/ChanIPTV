@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="CategoryContent" extends="ContentNode">
+    <interface>
+        <field id="categoryType" type="string" />
+        <field id="categoryKey" type="string" />
+    </interface>
+</component>

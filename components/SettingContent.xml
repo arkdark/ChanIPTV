@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SettingContent" extends="ContentNode">
+    <interface>
+        <field id="settingType" type="string" />
+        <field id="settingKey" type="string" />
+        <field id="settingUrl" type="string" />
+        <field id="settingValue" type="string" />
+        <field id="selected" type="boolean" value="false" />
+        <field id="trailing" type="string" />
+    </interface>
+</component>

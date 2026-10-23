@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="PillButton" extends="Group">
+    <interface>
+        <field id="text" type="string" value="" onChange="onTextChanged" />
+        <field id="active" type="boolean" value="false" onChange="onActiveChanged" />
+        <field id="focused" type="boolean" value="false" onChange="onFocusedChanged" />
+        <field id="trigger" type="integer" value="0" />
+    </interface>
+    <script type="text/brightscript" uri="PillButton.brs" />
+    <children>
+        <Poster id="normalPoster" uri="pkg:/images/btn_normal.png" width="150" height="44" />
+        <Poster id="activePoster" uri="pkg:/images/btn_focus.png" width="150" height="44" opacity="0" />
+        <Poster id="focusPoster" uri="pkg:/images/btn_focus.png" width="150" height="44" opacity="0" />
+        <Label id="buttonLabel" translation="[0,0]" width="150" height="44" font="font:MediumBoldSystemFont" color="0xE8EEF8FF" horizAlign="center" vertAlign="center" />
+    </children>
+</component>

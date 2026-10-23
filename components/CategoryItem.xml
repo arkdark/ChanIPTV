@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="CategoryItem" extends="Group">
+    <interface>
+        <field id="itemContent" type="node" onChange="onContentChanged" />
+        <field id="focusPercent" type="float" value="0" onChange="onFocusChanged" />
+    </interface>
+    <script type="text/brightscript" uri="CategoryItem.brs" />
+    <children>
+        <Poster id="bgNormal" uri="pkg:/images/category_card.png" width="270" height="100" />
+        <Poster id="bgFocus" uri="pkg:/images/category_focus.png" width="270" height="100" opacity="0" />
+        <Label id="titleLabel" translation="[20,18]" width="218" height="32" font="font:MediumBoldSystemFont" color="0xF2F6FCFF" vertAlign="center" />
+        <Label id="countLabel" translation="[20,55]" width="200" height="22" font="font:SmallSystemFont" color="0x7F8DA8FF" vertAlign="center" />
+        <Label id="chevronLabel" translation="[226,20]" width="32" height="48" font="font:LargeBoldSystemFont" color="0x57E6C8FF" horizAlign="center" vertAlign="center" text="›" />
+        <Poster id="favoriteStar" uri="pkg:/images/star.png" translation="[226,38]" width="26" height="26" visible="false" />
+    </children>
+</component>
