@@ -2,6 +2,7 @@ sub Init()
     m.top.width = 150
     m.top.height = 44
     m.top.focusable = true
+    m.top.setFocus(true)
 
     m.normalPoster = m.top.findNode("normalPoster")
     m.activePoster = m.top.findNode("activePoster")

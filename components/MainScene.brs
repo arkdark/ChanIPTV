@@ -110,37 +110,61 @@ sub FocusCurrentView()
     end if
 
     if m.view = "settings" and m.settingGrid.visible then
-        m.settingGrid.setFocus(true)
+        if not m.settingGrid.setFocus(true) then
+            m.navSettings.setFocus(true)
+        end if
         return
     end if
 
     if m.view = "channels" and m.channelGrid.visible then
-        m.channelGrid.setFocus(true)
+        if not m.channelGrid.setFocus(true) then
+            if m.categoryFilter = "favorites" then
+                m.navFavorites.setFocus(true)
+            else if m.categoryFilter = "search" then
+                m.navSearch.setFocus(true)
+            else
+                m.navCategories.setFocus(true)
+            end if
+        end if
         return
     end if
 
     if m.view = "categories" and m.categoryGrid.visible then
-        m.categoryGrid.setFocus(true)
+        if not m.categoryGrid.setFocus(true) then
+            m.navCategories.setFocus(true)
+        end if
         return
     end if
 
     if m.view = "error" and m.errorPanel.visible then
-        m.retryButton.setFocus(true)
+        if not m.retryButton.setFocus(true) then
+            m.navSettings.setFocus(true)
+        end if
         return
     end if
 
     if m.view = "settings" then
-        m.navSettings.setFocus(true)
+        if not m.navSettings.setFocus(true) then
+            m.top.setFocus(true)
+        end if
     else if m.view = "channels" then
         if m.categoryFilter = "favorites" then
-            m.navFavorites.setFocus(true)
+            if not m.navFavorites.setFocus(true) then
+                m.navCategories.setFocus(true)
+            end if
         else if m.categoryFilter = "search" then
-            m.navSearch.setFocus(true)
+            if not m.navSearch.setFocus(true) then
+                m.navCategories.setFocus(true)
+            end if
         else
-            m.navCategories.setFocus(true)
+            if not m.navCategories.setFocus(true) then
+                m.top.setFocus(true)
+            end if
         end if
     else
-        m.navCategories.setFocus(true)
+        if not m.navCategories.setFocus(true) then
+            m.top.setFocus(true)
+        end if
     end if
 end sub
 

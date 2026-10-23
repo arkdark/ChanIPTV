@@ -21,9 +21,9 @@
         <Label id="viewTitle" translation="[56,124]" width="920" height="42" font="font:ExtraLargeBoldSystemFont" color="0xFFFFFFFF" vertAlign="center" />
         <Label id="viewSubtitle" translation="[56,167]" width="1080" height="24" font="font:SmallSystemFont" color="0x8FA0BCFF" vertAlign="center" />
 
-        <MarkupGrid id="categoryGrid" translation="[56,196]" width="1160" height="336" itemSize="[270,100]" itemSpacing="[24,18]" numColumns="4" numRows="3" itemComponentName="CategoryItem" drawFocusFeedback="false" visible="false" />
-        <MarkupGrid id="channelGrid" translation="[56,196]" width="1160" height="410" itemSize="[180,196]" itemSpacing="[14,18]" numColumns="6" numRows="2" itemComponentName="ChannelItem" drawFocusFeedback="false" visible="false" />
-        <MarkupGrid id="settingGrid" translation="[56,196]" width="1152" height="408" itemSize="[1152,72]" itemSpacing="[0,12]" numColumns="1" numRows="5" itemComponentName="SettingItem" drawFocusFeedback="false" visible="false" />
+        <MarkupGrid id="categoryGrid" focusable="true" translation="[56,196]" width="1160" height="336" itemSize="[270,100]" itemSpacing="[24,18]" numColumns="4" numRows="3" itemComponentName="CategoryItem" drawFocusFeedback="false" visible="false" />
+        <MarkupGrid id="channelGrid" focusable="true" translation="[56,196]" width="1160" height="410" itemSize="[180,196]" itemSpacing="[14,18]" numColumns="6" numRows="2" itemComponentName="ChannelItem" drawFocusFeedback="false" visible="false" />
+        <MarkupGrid id="settingGrid" focusable="true" translation="[56,196]" width="1152" height="408" itemSize="[1152,72]" itemSpacing="[0,12]" numColumns="1" numRows="5" itemComponentName="SettingItem" drawFocusFeedback="false" visible="false" />
 
         <Group id="loadingPanel" visible="false">
             <ActivityIndicator id="loadingSpinner" translation="[608,300]" width="64" height="64" />
